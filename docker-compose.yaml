@@ -1,0 +1,9 @@
+services:
+  data_collection:
+    build: ./data_collection/.
+    volumes:
+      - ./storage:/usr/data
+    env_file:
+      - ./data_collection/.env
+    container_name: data_collection
+      
