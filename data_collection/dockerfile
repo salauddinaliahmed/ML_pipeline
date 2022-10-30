@@ -1,6 +1,2 @@
-FROM python:3.8-slim
-WORKDIR /usr/app
-COPY . .
-RUN pip install --upgrade setuptools
-RUN pip install -r requirements.txt
+FROM ml_pipeline:v1
 CMD ["python", "data_loader.py"]

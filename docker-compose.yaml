@@ -1,9 +1,19 @@
 services:
   data_collection:
     build: ./data_collection/.
+    image: data_collection
     volumes:
       - ./storage:/usr/data
+      - ./data_collection:/usr/code
     env_file:
       - ./data_collection/.env
     container_name: data_collection
-      
+  feat_gen:
+    build: ./feature_gen/.
+    image: feat_gen
+    volumes:
+      - ./storage:/usr/data
+      - ./feature_gen:/usr/code
+    env_file:
+      - ./feature_gen/.env
+    container_name: feat_gen

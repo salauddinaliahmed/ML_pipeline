@@ -5,20 +5,26 @@ import os
 import pandas as pd
 import requests
 
-def get_data():
-    data = None
-    """Make a url request and get the data"""
-    url_path = os.environ.get('URL_PATH', None)
-    data_loc = os.environ.get('DATA_PATH', None)
-    if url_path and data_loc:
-        resp = requests.get(url_path)
-        with open(f'{data_loc}/dataset.csv', 'wb+') as f:
-            f.write(resp.content)
-        return True
+URL_PATH = os.environ.get('URL_PATH', None)
+DATA_PATH = os.environ.get('DATA_PATH', None)
+FILE_NAME = "dataset.csv"
 
+
+def is_new():
+    # Todo
+    """Check if the file modified time is greater than the one we currently have."""
+    return True
+
+def get_data():
+    """Make a url request and get the data"""
+    if (URL_PATH and DATA_PATH) and is_new():
+        resp = requests.get(URL_PATH)
+        with open(f'{DATA_PATH}/{FILE_NAME}', 'wb') as f:
+            f.write(resp.content)
+        
 
 if __name__=='__main__':
-    if get_data():
-        print("Success!")
-    else:    
-        print("Fail")    
+    try:
+        get_data()
+    except Exception as e:
+        print(f"Exception raised: {e}")
