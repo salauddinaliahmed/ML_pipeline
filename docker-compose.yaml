@@ -4,7 +4,6 @@ services:
     image: data_collection
     volumes:
       - ./storage:/usr/data
-      - ./data_collection:/usr/code
     env_file:
       - ./data_collection/.env
     container_name: data_collection
@@ -13,7 +12,9 @@ services:
     image: feat_gen
     volumes:
       - ./storage:/usr/data
-      - ./feature_gen:/usr/code
     env_file:
       - ./feature_gen/.env
     container_name: feat_gen
+    depends_on:
+      data_collection:
+        condition: service_completed_successfully
