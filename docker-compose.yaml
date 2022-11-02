@@ -18,3 +18,14 @@ services:
     depends_on:
       data_collection:
         condition: service_completed_successfully
+  train:
+    build: ./training/.
+    image: training
+    volumes:
+      - ./storage:/usr/data
+    env_file:
+      - ./training/.env
+    container_name: train
+    depends_on:
+      feat_gen:
+        condition: service_completed_successfully

@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
+from sklearn import preprocessing
 
 DATA = os.environ.get('DATA', False)
 DATA_PATH = os.environ.get('DATA_PATH', False)
@@ -31,6 +32,8 @@ class FeatGen:
     @does_file_exist
     def load_data(self):
         self.df = pd.read_csv(DATA_PATH +'/'+ DATA, header=None, names=COL_NAMES)
+        le = preprocessing.LabelEncoder()
+        self.df = self.df.apply(le.fit_transform)
         print (self.df.head(5))
 
     def save_features(self, df=None, fname="dataset"):
