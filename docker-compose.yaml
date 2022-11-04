@@ -29,3 +29,22 @@ services:
     depends_on:
       feat_gen:
         condition: service_completed_successfully
+  inference:
+    build: ./inference/.
+    image: infer
+    volumes:
+      - ./storage:/usr/data
+    env_file:
+      - ./inference/.env
+    container_name: infer
+    depends_on:
+      train:
+        condition: service_completed_successfully
+  flask_app:
+    build: ./flask_app/.
+    ports:
+      - 5000:5000
+    image: f_app
+    volumes:
+      - ./storage:/usr/data
+    container_name: f_app
