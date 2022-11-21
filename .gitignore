@@ -1,3 +1,4 @@
 /storage/*
+# exception to the rule
+!storage/.gitkeep 
 Makefile
-/feat_gen

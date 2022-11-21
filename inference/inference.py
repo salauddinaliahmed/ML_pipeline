@@ -1,8 +1,14 @@
 import pickle
-import os
+import json
+
+
+env_vars = json.load(open('environments.json'))
+TRAINED_MODEL = env_vars['common']['TRAINED_MODEL']
+DATA_PATH = env_vars['common']['DATA_PATH']
+
 
 class Infer:
-    MODEL_FILE_PATH = os.environ.get('DATA_PATH')+'/'+os.environ.get('TRAINED_MODEL')
+    MODEL_FILE_PATH = DATA_PATH+'/'+TRAINED_MODEL
     def __init__(self):
         self.model = pickle.load(open(Infer.MODEL_FILE_PATH, 'rb'))
     

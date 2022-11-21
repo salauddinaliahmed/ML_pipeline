@@ -4,16 +4,12 @@ services:
     image: data_collection
     volumes:
       - ./storage:/usr/data
-    env_file:
-      - ./data_collection/.env
     container_name: data_collection
   feat_gen:
     build: ./feature_gen/.
     image: feat_gen
     volumes:
       - ./storage:/usr/data
-    env_file:
-      - ./feature_gen/.env
     container_name: feat_gen
     depends_on:
       data_collection:
@@ -23,8 +19,6 @@ services:
     image: training
     volumes:
       - ./storage:/usr/data
-    env_file:
-      - ./training/.env
     container_name: train
     depends_on:
       feat_gen:
@@ -34,8 +28,6 @@ services:
     image: infer
     volumes:
       - ./storage:/usr/data
-    env_file:
-      - ./inference/.env
     container_name: infer
     depends_on:
       train:

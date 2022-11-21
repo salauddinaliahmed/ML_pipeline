@@ -1,14 +1,15 @@
-import os
+import json
 import pickle
 import pandas as pd
 from sklearn import tree
 
-MODEL=os.environ.get('TRAINED_MODEL')
-DATA_PATH=os.environ.get('DATA_PATH')
+env_vars = json.load(open('environments.json'))
+TRAINED_MODEL = MODEL =env_vars['common']['TRAINED_MODEL']
+DATA_PATH=env_vars['common']['DATA_PATH']
 
 class Train:
-    X_train, y_train = os.environ.get('TRAIN_DS').split(',')
-    X_test, y_test = os.environ.get('TEST_DS').split(',')
+    X_train, y_train = env_vars['training']['TRAIN_DS'].split(",")
+    X_test, y_test = env_vars['training']['TEST_DS'].split(",")
 
     def __init__(self) -> None:
         self.clf = tree.DecisionTreeClassifier()

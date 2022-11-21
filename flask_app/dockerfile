@@ -1,4 +1,4 @@
-FROM ml_pipeline:v1
+FROM ml_pipeline:v2
 WORKDIR /usr/app
 COPY . .
 RUN pip install -r requirements.txt

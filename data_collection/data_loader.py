@@ -1,13 +1,15 @@
 """
 Purpose of this module is to make an api request and load data into the postgres database.
 """
-import os
+import json
 import pandas as pd
 import requests
 
-URL_PATH = os.environ.get('URL_PATH', None)
-DATA_PATH = os.environ.get('DATA_PATH', None)
-FILE_NAME = "dataset.csv"
+
+env_vars = json.load(open('environments.json'))
+URL_PATH = env_vars['data_collection']['URL_PATH']
+DATA_PATH = env_vars['common']['DATA_PATH'] 
+FILE_NAME = env_vars['common']['DATA']
 
 
 def is_new():

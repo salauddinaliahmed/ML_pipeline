@@ -1,13 +1,13 @@
-import os
+import json
 import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 
-DATA = os.environ.get('DATA', False)
-DATA_PATH = os.environ.get('DATA_PATH', False)
-COL_NAMES = os.environ.get('COLUMN_NAMES', None).split(',')
-
+env_vars = json.load(open('environments.json'))
+DATA_PATH = env_vars['common']['DATA_PATH']
+DATA = env_vars['common']['DATA']
+COL_NAMES = env_vars['feature_gen']['COLUMN_NAMES'].split(',')
 
 class NoDataError(Exception):
     def __init__(self, data_path=None):
@@ -26,14 +26,17 @@ class FeatGen:
             if p.exists():
                 func(obj)
             else:
-                raise NoDataError(data_path=DATA_PATH)
+                raise NoDataError(data_path=p)
         return wrapper
     
     @does_file_exist
     def load_data(self):
         self.df = pd.read_csv(DATA_PATH +'/'+ DATA, header=None, names=COL_NAMES)
-        le = preprocessing.LabelEncoder()
-        self.df = self.df.apply(le.fit_transform)
+        oh_encoder = preprocessing.OneHotEncoder()
+        encoded_sex = oh_encoder.fit_transform(self.df[['sex']]).toarray()
+        self.df = self.df.drop(columns=['sex'])
+        df_sex = pd.DataFrame(encoded_sex, columns=oh_encoder.get_feature_names())
+        self.df = self.df.join(df_sex)
         print (self.df.head(5))
 
     def save_features(self, df=None, fname="dataset"):
