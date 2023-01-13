@@ -3,6 +3,7 @@ import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
+from feat_gen_utils import process_col
 
 env_vars = json.load(open('environments.json'))
 DATA_PATH = env_vars['common']['DATA_PATH']
@@ -32,13 +33,10 @@ class FeatGen:
     @does_file_exist
     def load_data(self):
         self.df = pd.read_csv(DATA_PATH +'/'+ DATA, header=None, names=COL_NAMES)
-        oh_encoder = preprocessing.OneHotEncoder()
-        encoded_sex = oh_encoder.fit_transform(self.df[['sex']]).toarray()
-        self.df = self.df.drop(columns=['sex'])
-        df_sex = pd.DataFrame(encoded_sex, columns=oh_encoder.get_feature_names())
-        self.df = self.df.join(df_sex)
-        print (self.df.head(5))
-
+        
+    def pre_process(self):
+        self.df = process_col(self.df, column='sex')
+    
     def save_features(self, df=None, fname="dataset"):
         if df is None:
             df = self.df
@@ -66,5 +64,6 @@ class FeatGen:
 if __name__ == '__main__':
     features = FeatGen()
     features.load_data()
+    features.pre_process()
     features.save_features()
     features.create_train_test()

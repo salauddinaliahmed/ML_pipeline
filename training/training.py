@@ -1,7 +1,8 @@
 import json
 import pickle
 import pandas as pd
-from sklearn import tree
+from sklearn.linear_model import LinearRegression
+
 
 env_vars = json.load(open('environments.json'))
 TRAINED_MODEL = MODEL =env_vars['common']['TRAINED_MODEL']
@@ -12,7 +13,7 @@ class Train:
     X_test, y_test = env_vars['training']['TEST_DS'].split(",")
 
     def __init__(self) -> None:
-        self.clf = tree.DecisionTreeClassifier()
+        self.clf = LinearRegression()
         self.model = None
         self.X_train = pd.read_csv(f'{DATA_PATH}/{Train.X_train}.csv')
         self.y_train = pd.read_csv(f'{DATA_PATH}/{Train.y_train}.csv')
